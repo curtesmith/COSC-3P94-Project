@@ -30,12 +30,8 @@ pi = 0;
 
 function setup() {
 	window.onmousedown = mouseDown;
-	setupQuestionnaire(true, permutations[pi].length, permutations[pi].position);
-	pi++;
-
-	attachRadioButtonEventHandlers();
 	$("proceed").onclick = proceedClick;
-	start = new Date();
+	reset();
 }
 
 function mouseDown(e) {
@@ -43,6 +39,16 @@ function mouseDown(e) {
 		clearMessage();
 		numberOfClicks++;
 	}
+}
+
+function reset() {
+	numberOfClicks = 0;
+	numberOfErrors = 0;
+	done = false;
+	setupQuestionnaire(true, permutations[pi].length, permutations[pi].position);
+	pi++;
+	attachRadioButtonEventHandlers();
+	start = new Date();
 }
 
 function setupQuestionnaire(scramble, length, position) {
@@ -62,6 +68,8 @@ function setupQuestionnaire(scramble, length, position) {
 	for (var i = 0; i < length; i++) {
 		appendChoice($("question"), choices[i]);
 	}
+
+	clearMessage();
 
 	$("proceed").disabled = true;
 
@@ -97,6 +105,7 @@ function appendChoice(container, choice) {
 	var text = $createText(choice);
 	div.appendChild(radio);
 	div.appendChild(text);
+	div.setAttribute("class", "choice");
 	container.appendChild(div);
 }
 
@@ -111,7 +120,7 @@ function proceedClick(e) {
 	if (pi >= permutations.length) {
 		pi = 0;
 	}
-	setup();
+	reset();
 }
 
 function disableRadioButtons() {
