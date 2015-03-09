@@ -1,19 +1,33 @@
 @CHARSET "ISO-8859-1";
-#message {
-	height: 15px;
+
+#progress {
+	border: solid thin silver;
+	width: 500px;
+	margin: 0px 0px 0px 100px;
+	height: 20px;
 }
 
+#progress_bar {
+	background-color: lightgreen;
+	width: 0%;
+	padding: 20px 0px 0px 0px;
+}
+
+#message {
+	margin: 0px 0px 0px 100px;
+	height: 20px;
+}
 
 #button {
-	margin: 10px 0px 0px 10px;
+	margin: 20px 0px 0px 10px;
 	float: left;
 }
 
-input[type=button]{
+input[type=button] {
 	padding: 15px 15px 15px 15px;
 }
 
-input[type=radio]{
+input[type=radio] {
 	width: 40px;
 	height: 20px;
 	cursor: pointer;
@@ -21,21 +35,9 @@ input[type=radio]{
 }
 
 #question {
-	margin: 0px 0px 0px 50px; 
+	margin: 0px 0px 0px 100px;
 	float: left;
 	border: solid thin silver;
-}
-
-#progress {
-	border: solid thin silver;
-	width: 500px;
-	margin: 0px 0px 0px 50px;
-}
-
-#progress_bar {
-	background-color: lightgreen;
-	width: 0%;
-	padding: 20px 0px 0px 0px;
 }
 
 div.error {
@@ -47,7 +49,7 @@ div.success {
 }
 
 div.choice {
-	vertical-align: top;	
+	vertical-align: top;
 }
 
 div {
