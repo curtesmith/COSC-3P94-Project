@@ -1,0 +1,20 @@
+@CHARSET "ISO-8859-1";
+#message {
+	height: 15px;
+}
+
+#question {
+	margin: 0px 50px 0px 50px; 
+}
+
+div.error {
+	color: Red;
+}
+
+div.success {
+	color: Green;
+}
+
+div {
+	padding: 5px 0px 5px 20px;
+}
