@@ -103,8 +103,9 @@ function appendChoice(container, choice) {
 	radio.setAttribute("type", "radio");
 	radio.setAttribute("value", choice);
 	var text = $createText(choice);
-	div.appendChild(radio);
 	div.appendChild(text);
+	div.appendChild(radio);
+
 	div.setAttribute("class", "choice");
 	container.appendChild(div);
 }

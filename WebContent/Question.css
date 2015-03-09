@@ -1,5 +1,10 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	font-family: Arial, Helvetica;
+	font-size: 12pt;
+}
+
 #progress {
 	border: solid thin silver;
 	width: 500px;
@@ -31,7 +36,7 @@ input[type=radio] {
 	width: 40px;
 	height: 20px;
 	cursor: pointer;
-	margin: 0px 20px 0px 50px;
+	margin: 0px 20px 0px 10px;
 }
 
 #question {
@@ -50,6 +55,7 @@ div.success {
 
 div.choice {
 	vertical-align: top;
+	text-align: right;
 }
 
 div {
