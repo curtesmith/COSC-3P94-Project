@@ -2,9 +2,11 @@
  * 
  */
 document.addEventListener("DOMContentLoaded", setup, false);
+
 var start = 0;
 var numberOfClicks = 0;
 var numberOfErrors = 0;
+var totalQuestions = 0;
 var done = false;
 var solution = "";
 
@@ -14,7 +16,10 @@ for (var l = 3; l <= 6; l = l + 3) {
 	for (var p = 0; p < l; p++) {
 		permutations[pi] = {
 			length : l,
-			position : p
+			position : p,
+			trial1 : 0,
+			trial2 : 0,
+			trial3 : 0
 		};
 		pi++;
 	}
@@ -25,11 +30,6 @@ pi = 0;
 
 function setup() {
 	window.onmousedown = mouseDown;
-
-	// var random = Math.random();
-	// var max = Math.floor(random * 100);
-	// var position = max % 18;
-
 	setupQuestionnaire(true, permutations[pi].length, permutations[pi].position);
 	pi++;
 
@@ -56,13 +56,16 @@ function setupQuestionnaire(scramble, length, position) {
 	}
 
 	$("question").innerHTML = "";
-	
-	appendQuestion($("question"), choices[position]);	
+
+	appendQuestion($("question"), choices[position]);
 
 	for (var i = 0; i < length; i++) {
 		appendChoice($("question"), choices[i]);
 	}
 
+	$("proceed").disabled = true;
+
+	totalQuestions++;
 }
 
 function shuffle(array) {
@@ -105,6 +108,9 @@ function attachRadioButtonEventHandlers() {
 }
 
 function proceedClick(e) {
+	if (pi >= permutations.length) {
+		pi = 0;
+	}
 	setup();
 }
 
@@ -122,10 +128,14 @@ function clearMessage() {
 function radioAnswerSelected(e) {
 	if (isCorrect(e.target.value)) {
 		done = true;
-		showSuccess();
+		var responseTimeInMilliseconds = new Date().getTime() - start.getTime();
+		showSuccess(responseTimeInMilliseconds);
 		disableRadioButtons();
-		// record the result in the database
-		enableProceedButton();
+		recordResults(responseTimeInMilliseconds);
+		showProgress();
+		showResults();
+		if (totalQuestions < (permutations.length * 3))
+			enableProceedButton();
 	} else {
 		showError();
 		numberOfErrors++;
@@ -133,16 +143,40 @@ function radioAnswerSelected(e) {
 	}
 }
 
+function recordResults(time) {
+	if (totalQuestions <= permutations.length) {
+		permutations[pi - 1].trial1 = time;
+	} else if (totalQuestions <= permutations.length * 2) {
+		permutations[pi - 1].trial2 = time;
+	} else {
+		permutations[pi - 1].trial3 = time;
+	}
+}
+
 function isCorrect(value) {
 	return value == solution;
 }
 
-function showSuccess() {
-	var responseTimeInMilliseconds = new Date().getTime() - start.getTime();
+function showProgress() {
+	var percent = (totalQuestions / (permutations.length * 3)) * 100;
+	$("progress_bar").style.width = percent + "%";
+}
+
+function showResults() {
+	var results = "Order,Number Of Items,Position,Trial #1,Trial #2,Trial #3 <br />";
+	for (var i = 0; i < permutations.length; i++) {
+		results += "Random," + permutations[i].length + ","
+				+ (permutations[i].position + 1) + "," + permutations[i].trial1
+				+ "," + permutations[i].trial2 + "," + permutations[i].trial3
+				+ "<br />";
+	}
+	$("results").innerHTML = results;
+}
+
+function showSuccess(time) {
 	$("message").className = "success";
-	$("message").innerHTML = "Success, time=[" + responseTimeInMilliseconds
-			+ "], number of errors=[" + numberOfErrors
-			+ "], number of clicks=[" + numberOfClicks + "]";
+	$("message").innerHTML = "Success, time=[" + time + "], number of errors=["
+			+ numberOfErrors + "], number of clicks=[" + numberOfClicks + "]";
 }
 
 function showError() {
