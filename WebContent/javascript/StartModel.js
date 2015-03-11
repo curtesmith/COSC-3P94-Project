@@ -9,7 +9,7 @@ function StartModel(presenter) {
 
 	var _presenter = presenter;
 	database = new Database();
-	database.connect(_presenter.getView().window);
+	database.connect(_presenter.window);
 	session = new Session(database);
 
 	function startNewTest(email) {

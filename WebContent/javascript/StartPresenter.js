@@ -4,11 +4,11 @@
 function StartPresenter(view) {
 	StartPresenter.prototype.startClicked = startClicked;
 	StartPresenter.prototype.continueClicked = continueClicked;
-	StartPresenter.prototype.getView = getView;
 	StartPresenter.prototype.alert = alert;
 	StartPresenter.prototype.gotoQuestions = gotoQuestions;
 	
 	var _view = view;
+	this.window = view.window;
 	var _model = new StartModel(this);
 	
 	function startClicked(email) {
