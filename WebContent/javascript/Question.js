@@ -15,7 +15,7 @@ var participant = null;
 
 var permutations = new Array();
 var pi = 0;
-for (var l = 3; l <= 6; l = l + 3) {
+for (var l = 3; l <= 3; l = l + 3) {
 	for (var p = 0; p < l; p++) {
 		permutations[pi] = {
 			length : l,
