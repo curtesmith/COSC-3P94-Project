@@ -4,21 +4,16 @@
 
 function Participant(db) {
 	var DAL = db;
-	this.PIN = null;
-	this.checkingBalance = null;
-	this.clientId = null;
-	this.created = null;
-	this.givenName = null;
-	this.savingsBalance = null;
-	this.creditCard = null;
-	this.surname = null;
+	this.id = null;
+	this.results = null;
 
 	Participant.prototype.getById = getById;
 	Participant.prototype.fill = fill;
 	Participant.prototype.update = update;
+	Participant.prototype.add = add;
 
 	function getById(id, callback) {
-		if (id === "" || isNaN(id))
+		if (id === "")
 			return;
 
 		var request = DAL.selectParticipantById(id);
@@ -26,14 +21,12 @@ function Participant(db) {
 	}
 
 	function fill(data) {
-		this.PIN = data["PIN"];
-		this.checkingBalance = data["checkingBalance"];
-		this.clientId = data["clientId"];
-		this.created = data["created"];
-		this.givenName = data["givenName"];
-		this.savingsBalance = data["savingsBalance"];
-		this.creditCard = data["creditCard"];
-		this.surname = data["surname"];
+		this.id = data.id;
+		this.results = data.results;
+	}
+	
+	function add(callback){
+		DAL.addParticipant(this, callback);
 	}
 	
 	function update(callback){

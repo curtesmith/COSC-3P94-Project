@@ -9,6 +9,9 @@ var numberOfErrors = 0;
 var totalQuestions = 0;
 var done = false;
 var solution = "";
+var database = null;
+var session = null;
+var participant = null;
 
 var permutations = new Array();
 var pi = 0;
@@ -29,9 +32,23 @@ permutations = shuffle(permutations);
 pi = 0;
 
 function setup() {
-	window.onmousedown = mouseDown;
-	$("proceed").onclick = proceedClick;
-	reset();
+	database = new Database(window);
+	database.connectWithCallback(window, function(e) {
+		session = new Session(database);
+
+		session.get(function(e) {
+			if (e.target.result) {
+				participant = new Participant(database);
+				participant.fill(e.target.result.value);
+				participant.results = permutations;
+				window.onmousedown = mouseDown;
+				$("proceed").onclick = proceedClick;
+				$("results_button").onclick = showResults;
+				reset();
+			}
+
+		});
+	});
 }
 
 function mouseDown(e) {
@@ -71,7 +88,7 @@ function setupQuestionnaire(scramble, length, position) {
 
 	clearMessage();
 
-	$("proceed").disabled = true;
+	$("proceed").style.visibility = "hidden";
 
 	totalQuestions++;
 }
@@ -143,9 +160,11 @@ function radioAnswerSelected(e) {
 		disableRadioButtons();
 		recordResults(responseTimeInMilliseconds);
 		showProgress();
-		showResults();
-		if (totalQuestions < (permutations.length * 3))
+		if (totalQuestions < (permutations.length * 3)) {
 			enableProceedButton();
+		} else {
+			enableResultsButton();
+		}
 	} else {
 		showError();
 		numberOfErrors++;
@@ -161,6 +180,13 @@ function recordResults(time) {
 	} else {
 		permutations[pi - 1].trial3 = time;
 	}
+
+	participant.results = permutations;
+	participant.update(function(e) {
+		session.update(participant, function(e) {
+			console.log("session updated");
+		});
+	});
 }
 
 function isCorrect(value) {
@@ -173,14 +199,7 @@ function showProgress() {
 }
 
 function showResults() {
-	var results = "Order,Number Of Items,Position,Trial #1,Trial #2,Trial #3 <br />";
-	for (var i = 0; i < permutations.length; i++) {
-		results += "Random," + permutations[i].length + ","
-				+ (permutations[i].position + 1) + "," + permutations[i].trial1
-				+ "," + permutations[i].trial2 + "," + permutations[i].trial3
-				+ "<br />";
-	}
-	$("results").innerHTML = results;
+	location.replace("Results.html");
 }
 
 function showSuccess(time) {
@@ -195,5 +214,9 @@ function showError() {
 }
 
 function enableProceedButton() {
-	$("proceed").disabled = false;
+	$("proceed").style.visibility = "visible";
+}
+
+function enableResultsButton() {
+	$("results_button").style.visibility = "visible";
 }

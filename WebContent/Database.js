@@ -8,12 +8,31 @@ function Database() {
 	var asyncCallback = null;
 	Database.prototype.connect = connect;
 	Database.prototype.connectWithCallback = connectWithCallback;
+	Database.prototype.addParticipant = addParticipant;
 	Database.prototype.selectParticipantById = selectParticipantById;
 	Database.prototype.updateParticipant = updateParticipant;
 	Database.prototype.getSession = getSession;
 	Database.prototype.updateSessionWithCallback = updateSessionWithCallback;
 	Database.prototype.clearSessionWithCallback = clearSessionWithCallback;
 
+	function addParticipant(participant, callback) {
+		var transaction = instance.transaction([ "participants" ], "readwrite");
+		var store = transaction.objectStore("participants");
+		var request = store.add(participant, participant.id);
+		
+		request.onerror = function(e) {
+			console.log("Error in addParticipant", e.target.error.name);
+		}
+
+		request.onsuccess = function(e) {
+			console.log("participant added with id:" + participant.id);
+		}
+		
+		if (callback) {
+			transaction.oncomplete = callback;
+		}		
+	}
+	
 	function selectParticipantById(id) {
 		var transaction = instance.transaction([ "participants" ], "readonly");
 		var store = transaction.objectStore("participants");
@@ -22,22 +41,17 @@ function Database() {
 		return index.get(id);
 	}
 
-	function updateParticipant(customer, callback) {
+	function updateParticipant(participant, callback) {
 		var transaction = instance.transaction([ "participants" ], "readwrite");
 		var store = transaction.objectStore("participants");
 		var index = store.index("id");
-		var getRequest = index.get(customer.clientId);
+		var getRequest = index.get(participant.id);
 
 		getRequest.onsuccess = function(e) {
-			var custData = getRequest.result;
-			custData.PIN = customer.PIN;
-			custData.checkingBalance = customer.checkingBalance;
-			custData.givenName = customer.givenName;
-			custData.savingsBalance = customer.savingsBalance;
-			custData.creditCard = customer.creditCard;
-			custData.surname = customer.surname;
-
-			var putRequest = store.put(custData, custData.clientId);
+			var p = getRequest.result;
+			p.results = participant.results;
+			
+			var putRequest = store.put(p, p.id);
 			if (callback) {
 				putRequest.onsuccess = function(e) {
 					callback(e);
@@ -58,11 +72,10 @@ function Database() {
 		request.onsuccess = callback;
 	}
 
-	function updateSessionWithCallback(customer, callback) {
+	function updateSessionWithCallback(participant, callback) {
 		var transaction = instance.transaction([ "session" ], "readwrite");
 		var store = transaction.objectStore("session");
-		var request = store.add(customer, customer.clientId);
-
+		var request = store.add(participant, participant.id);
 		if (callback) {
 			transaction.oncomplete = callback;
 		}

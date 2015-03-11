@@ -8,9 +8,9 @@ function Session(db) {
 	Session.prototype.clear = clear;
 	Session.prototype.get = get;
 
-	function update(customer, callback) {
+	function update(participant, callback) {
 		clear(function(e) {
-			DAL.updateSessionWithCallback(customer, callback);
+			DAL.updateSessionWithCallback(participant, callback);
 		});
 	}
 
