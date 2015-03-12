@@ -16,9 +16,15 @@ function ResultsPresenter(view) {
 
 	function renderResults(participant) {
 		var results = "id,Order,Number Of Items,Position,Trial #1,Trial #2,Trial #3 <br />";
+		var order = "";
 
 		for (var i = 0; i < participant.results.length; i++) {
-			results += participant.id + "," + "Random,"
+			if(participant.results[i].scramble == true) {
+				order = "Random";
+			} else {
+				order = "Alphabetic";
+			}
+			results += participant.id + "," + order + ","
 					+ participant.results[i].length + ","
 					+ (participant.results[i].position + 1) + ","
 					+ participant.results[i].trial1 + ","
