@@ -2,9 +2,10 @@
  * 
  */
 document.addEventListener("DOMContentLoaded", setup, false);
+var view = null;
 
 function setup() {
-	var view = new ResultsView();
+	view = new ResultsView();
 	view.ready();
 }
 
