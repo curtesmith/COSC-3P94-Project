@@ -2,9 +2,9 @@
  * 
  */
 
-function ResultsPresenter(view) {
-	var _view = view;
-	this.window = _view.window;
+function ResultsPresenter(iView) {
+	var view = iView;
+	this.window = view.window;
 	ResultsPresenter.prototype.ready = ready;
 	ResultsPresenter.prototype.renderResults = renderResults;
 
@@ -32,6 +32,6 @@ function ResultsPresenter(view) {
 					+ participant.results[i].trial3 + "<br />";
 		}
 
-		_view.setResults(results);
+		view.setResults(results);
 	}
 }

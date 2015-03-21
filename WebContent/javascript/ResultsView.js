@@ -14,10 +14,10 @@ function ResultsView() {
 	ResultsView.prototype.ready = ready;
 	this.window = window;
 
-	var _presenter = new ResultsPresenter(this);
+	var presenter = new ResultsPresenter(this);
 
 	function ready() {
-		_presenter.ready();
+		presenter.ready();
 	}
 
 	function setResults(results) {

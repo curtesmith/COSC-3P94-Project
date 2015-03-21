@@ -1,7 +1,7 @@
 /**
  * 
  */
-function QuestionModel(presenter) {
+function QuestionModel(iPresenter) {
 	QuestionModel.prototype.isCorrect = isCorrect;
 	QuestionModel.prototype.setSolution = setSolution;
 	QuestionModel.prototype.reset = reset;
@@ -10,7 +10,7 @@ function QuestionModel(presenter) {
 	QuestionModel.prototype.next = next;
 	QuestionModel.prototype.stopTimer = stopTimer;
 
-	var _presenter = presenter;
+	var presenter = iPresenter;
 	var solution = "";
 	this.totalQuestions = 0;
 	var start = 0;
@@ -26,11 +26,11 @@ function QuestionModel(presenter) {
 	var permutations = new Array();
 	var pi = 0;
 
-	for (var s = 0; s < 2; s++) {
+	for (var r = 0; r < 2; r++) {
 		for (var l = 3; l <= 3; l = l + 3) {
 			for (var p = 0; p < l; p++) {
 				permutations[pi] = {
-					scramble : s == 0,
+					random : r == 0,
 					length : l,
 					position : p,
 					trial1 : 0,
@@ -46,7 +46,7 @@ function QuestionModel(presenter) {
 	pi = 0;
 
 	database = new Database();
-	database.connectWithCallback(_presenter.window, function(e) {
+	database.connectWithCallback(presenter.window, function(e) {
 		session = new Session(database);
 
 		session.get(function(e) {
@@ -74,7 +74,7 @@ function QuestionModel(presenter) {
 		this.done = false;
 		this.responseTime = 0;
 		start = new Date();
-		_presenter.setupQuestionnaire(permutations[pi].scramble, permutations[pi].length,
+		presenter.setupQuestionnaire(permutations[pi].random, permutations[pi].length,
 				permutations[pi].position);
 		pi++;
 	}

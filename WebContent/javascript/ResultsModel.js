@@ -1,14 +1,14 @@
 /**
  * 
  */
-function ResultsModel(presenter) {
-	var _presenter = presenter;
+function ResultsModel(iPresenter) {
+	var presenter = iPresenter;
 	ResultsModel.prototype.ready = ready;
 	ResultsModel.prototype.showResults = showResults;
 
 	function ready() {
 		database = new Database();
-		database.connectWithCallback(_presenter.window, function(e) {
+		database.connectWithCallback(presenter.window, function(e) {
 			showResults();
 		});
 	}
@@ -20,7 +20,7 @@ function ResultsModel(presenter) {
 			if (e.target.result) {
 				var participant = new Participant(database);
 				participant.fill(e.target.result.value);
-				_presenter.renderResults(participant);
+				presenter.renderResults(participant);
 			}
 
 		});

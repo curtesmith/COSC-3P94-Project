@@ -2,14 +2,14 @@
  * 
  */
 
-function StartModel(presenter) {
+function StartModel(iPresenter) {
 	StartModel.prototype.startNewTest = startNewTest;
 	StartModel.prototype.continueTest = continueTest;
 	StartModel.prototype.gotoQuestions = gotoQuestions;
 
-	var _presenter = presenter;
+	var presenter = iPresenter;
 	database = new Database();
-	database.connect(_presenter.window);
+	database.connect(presenter.window);
 	session = new Session(database);
 
 	function startNewTest(email) {

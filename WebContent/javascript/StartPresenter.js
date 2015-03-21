@@ -1,33 +1,33 @@
 /**
  * 
  */
-function StartPresenter(view) {
+function StartPresenter(iView) {
 	StartPresenter.prototype.startClicked = startClicked;
 	StartPresenter.prototype.continueClicked = continueClicked;
 	StartPresenter.prototype.alert = alert;
 	StartPresenter.prototype.gotoQuestions = gotoQuestions;
 	
-	var _view = view;
+	var view = iView;
 	this.window = view.window;
-	var _model = new StartModel(this);
+	var model = new StartModel(this);
 	
 	function startClicked(email) {
-		_model.startNewTest(email);
+		model.startNewTest(email);
 	}
 	
 	function continueClicked(email) {
-		_model.continueTest(email);
+		model.continueTest(email);
 	}
 	
 	function getView() {
-		return _view;
+		return view;
 	}
 	
 	function alert(message){
-		_view.alert(message);
+		view.alert(message);
 	}
 	
 	function gotoQuestions() {
-		_view.gotoQuestions();
+		view.gotoQuestions();
 	}
 }
