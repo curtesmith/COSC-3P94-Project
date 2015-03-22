@@ -118,6 +118,7 @@ function QuestionView() {
 
 	function showProgress(percent) {
 		$("progress_bar").style.width = percent + "%";
+		$("progress_bar").innerHTML = Math.floor(percent) + "%";
 	}
 
 	function clearQuestion() {

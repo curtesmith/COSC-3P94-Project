@@ -32,16 +32,16 @@ function QuestionPresenter(iView) {
 		view.attachRadioButtonEventHandlers();
 		view.clearMessage();
 		view.disableProceedButton();
-		model.totalQuestions++;
+		model.incrementTotalQuestions();
 	}
 
 	function radioAnswerSelected(value) {
 		if (model.isCorrect(value)) {
 			model.stopTimer();
 			model.recordResults();
-			view.showSuccess(model.getResponseTime(), model.getNumberOfClicks(),
-					model.getNumberOfErrors());
-			view.disableRadioButtons();			
+			view.showSuccess(model.getResponseTime(),
+					model.getNumberOfClicks(), model.getNumberOfErrors());
+			view.disableRadioButtons();
 			view.showProgress(model.getProgress());
 			if (model.getProgress() < 100) {
 				view.enableProceedButton();

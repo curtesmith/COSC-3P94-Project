@@ -15,7 +15,7 @@ body{
 #progress_bar {
 	background-color: lightgreen;
 	width: 0%;
-	padding: 20px 0px 0px 0px;
+	padding: 5px 0px 1px 0px;
 }
 
 #message {

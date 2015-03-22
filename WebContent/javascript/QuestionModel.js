@@ -6,7 +6,6 @@ function QuestionModel(iPresenter) {
 	QuestionModel.prototype.setSolution = setSolution;
 	QuestionModel.prototype.reset = reset;
 	QuestionModel.prototype.recordResults = recordResults;
-	QuestionModel.prototype.getProgress = getProgress;
 	QuestionModel.prototype.next = next;
 	QuestionModel.prototype.stopTimer = stopTimer;
 	QuestionModel.prototype.isDone = isDone;
@@ -28,7 +27,7 @@ function QuestionModel(iPresenter) {
 	var pi = 0;
 
 	for (var r = 0; r < 2; r++) {
-		for (var l = 3; l <= 18; l = l + 3) {
+		for (var l = 3; l <= 3; l = l + 3) {
 			for (var p = 0; p < l; p++) {
 				permutations[pi] = {
 					random : r == 0,
@@ -36,7 +35,13 @@ function QuestionModel(iPresenter) {
 					position : p,
 					trial1 : 0,
 					trial2 : 0,
-					trial3 : 0
+					trial3 : 0,
+					trial1Clicks : 0,
+					trial1Errors : 0,
+					trial2Clicks : 0,
+					trial2Errors : 0,
+					trial3Clicks : 0,
+					trial3Errors : 0
 				};
 				pi++;
 			}
@@ -83,10 +88,16 @@ function QuestionModel(iPresenter) {
 	function recordResults() {
 		if (totalQuestions <= permutations.length) {
 			permutations[pi - 1].trial1 = responseTime;
+			permutations[pi - 1].trail1Clicks = numberOfClicks;
+			permutations[pi - 1].trial1Errors = numberOfErrors;
 		} else if (totalQuestions <= permutations.length * 2) {
 			permutations[pi - 1].trial2 = responseTime;
+			permutations[pi - 1].trail2Clicks = numberOfClicks;
+			permutations[pi - 1].trial2Errors = numberOfErrors;
 		} else {
 			permutations[pi - 1].trial3 = responseTime;
+			permutations[pi - 1].trail3Clicks = numberOfClicks;
+			permutations[pi - 1].trial3Errors = numberOfErrors;
 		}
 
 		participant.results = permutations;
@@ -95,6 +106,11 @@ function QuestionModel(iPresenter) {
 				console.log("session updated");
 			});
 		});
+	}
+	
+	QuestionModel.prototype.incrementTotalQuestions = incrementTotalQuestions;
+	function incrementTotalQuestions() {
+		totalQuestions++;
 	}
 	
 	QuestionModel.prototype.incrementNumberOfClicks = incrementNumberOfClicks;
@@ -108,24 +124,22 @@ function QuestionModel(iPresenter) {
 		numberOfErrors++;
 	}
 	
+	QuestionModel.prototype.getProgress = getProgress;
 	function getProgress() {
 		return (totalQuestions / (permutations.length * 3)) * 100;
 	}
 	
-	QuestionModel.prototype.getNumberOfErrors = getNumberOfErrors;
-	
+	QuestionModel.prototype.getNumberOfErrors = getNumberOfErrors;	
 	function getNumberOfErrors() {
 		return numberOfErrors;
 	}
 	
-	QuestionModel.prototype.getNumberOfClicks = getNumberOfClicks;
-	
+	QuestionModel.prototype.getNumberOfClicks = getNumberOfClicks;	
 	function getNumberOfClicks() {
 		return numberOfClicks;
 	}
 	
-	QuestionModel.prototype.getResponseTime = getResponseTime;
-	
+	QuestionModel.prototype.getResponseTime = getResponseTime;	
 	function getResponseTime(){
 		return responseTime;
 	}
