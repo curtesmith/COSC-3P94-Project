@@ -9,15 +9,16 @@ function QuestionModel(iPresenter) {
 	QuestionModel.prototype.getProgress = getProgress;
 	QuestionModel.prototype.next = next;
 	QuestionModel.prototype.stopTimer = stopTimer;
+	QuestionModel.prototype.isDone = isDone;
 
 	var presenter = iPresenter;
 	var solution = "";
-	this.totalQuestions = 0;
+	var totalQuestions = 0;
 	var start = 0;
-	this.numberOfClicks = 0;
-	this.numberOfErrors = 0;
-	this.done = false;
-	this.responseTime = 0;
+	var numberOfClicks = 0;
+	var numberOfErrors = 0;
+	var done = false;
+	var responseTime = 0;
 
 	var database = null;
 	var session = null;
@@ -27,7 +28,7 @@ function QuestionModel(iPresenter) {
 	var pi = 0;
 
 	for (var r = 0; r < 2; r++) {
-		for (var l = 3; l <= 3; l = l + 3) {
+		for (var l = 3; l <= 18; l = l + 3) {
 			for (var p = 0; p < l; p++) {
 				permutations[pi] = {
 					random : r == 0,
@@ -69,23 +70,23 @@ function QuestionModel(iPresenter) {
 	}
 
 	function reset() {
-		this.numberOfClicks = 0;
-		this.numberOfErrors = 0;
-		this.done = false;
-		this.responseTime = 0;
+		numberOfClicks = 0;
+		numberOfErrors = 0;
+		done = false;
+		responseTime = 0;
 		start = new Date();
-		presenter.setupQuestionnaire(permutations[pi].random, permutations[pi].length,
-				permutations[pi].position);
+		presenter.setupQuestionnaire(permutations[pi].random,
+				permutations[pi].length, permutations[pi].position);
 		pi++;
 	}
 
 	function recordResults() {
-		if (this.totalQuestions <= permutations.length) {
-			permutations[pi - 1].trial1 = this.responseTime;
-		} else if (this.totalQuestions <= permutations.length * 2) {
-			permutations[pi - 1].trial2 = this.responseTime;
+		if (totalQuestions <= permutations.length) {
+			permutations[pi - 1].trial1 = responseTime;
+		} else if (totalQuestions <= permutations.length * 2) {
+			permutations[pi - 1].trial2 = responseTime;
 		} else {
-			permutations[pi - 1].trial3 = this.responseTime;
+			permutations[pi - 1].trial3 = responseTime;
 		}
 
 		participant.results = permutations;
@@ -95,9 +96,38 @@ function QuestionModel(iPresenter) {
 			});
 		});
 	}
+	
+	QuestionModel.prototype.incrementNumberOfClicks = incrementNumberOfClicks;
 
+	function incrementNumberOfClicks() {
+		numberOfClicks++;
+	}
+	
+	QuestionModel.prototype.incrementNumberOfErrors = incrementNumberOfErrors;
+	function incrementNumberOfErrors() {
+		numberOfErrors++;
+	}
+	
 	function getProgress() {
-		return (this.totalQuestions / (permutations.length * 3)) * 100;
+		return (totalQuestions / (permutations.length * 3)) * 100;
+	}
+	
+	QuestionModel.prototype.getNumberOfErrors = getNumberOfErrors;
+	
+	function getNumberOfErrors() {
+		return numberOfErrors;
+	}
+	
+	QuestionModel.prototype.getNumberOfClicks = getNumberOfClicks;
+	
+	function getNumberOfClicks() {
+		return numberOfClicks;
+	}
+	
+	QuestionModel.prototype.getResponseTime = getResponseTime;
+	
+	function getResponseTime(){
+		return responseTime;
 	}
 
 	function next() {
@@ -107,8 +137,12 @@ function QuestionModel(iPresenter) {
 		reset();
 	}
 
+	function isDone() {
+		return done;
+	}
+
 	function stopTimer() {
-		this.done = true;
-		this.responseTime = new Date().getTime() - start.getTime();
+		done = true;
+		responseTime = new Date().getTime() - start.getTime();
 	}
 }

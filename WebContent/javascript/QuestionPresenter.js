@@ -39,8 +39,8 @@ function QuestionPresenter(iView) {
 		if (model.isCorrect(value)) {
 			model.stopTimer();
 			model.recordResults();
-			view.showSuccess(model.responseTime, model.numberOfClicks,
-					model.numberOfErrors);
+			view.showSuccess(model.getResponseTime(), model.getNumberOfClicks(),
+					model.getNumberOfErrors());
 			view.disableRadioButtons();			
 			view.showProgress(model.getProgress());
 			if (model.getProgress() < 100) {
@@ -50,7 +50,7 @@ function QuestionPresenter(iView) {
 			}
 		} else {
 			view.showError();
-			model.numberOfErrors++;
+			model.incrementNumberOfErrors();
 		}
 	}
 
@@ -59,9 +59,9 @@ function QuestionPresenter(iView) {
 	}
 
 	function mouseDown() {
-		if (!model.done) {
+		if (!model.isDone()) {
 			view.clearMessage();
-			model.numberOfClicks++;
+			model.incrementNumberOfClicks();
 		}
 	}
 }
