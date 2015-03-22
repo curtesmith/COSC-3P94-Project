@@ -19,7 +19,7 @@ function ResultsPresenter(iView) {
 		var order = "";
 
 		for (var i = 0; i < participant.results.length; i++) {
-			if(participant.results[i].scramble == true) {
+			if(participant.results[i].random) {
 				order = "Random";
 			} else {
 				order = "Alphabetic";
