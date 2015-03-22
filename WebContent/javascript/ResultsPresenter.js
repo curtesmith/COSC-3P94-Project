@@ -36,7 +36,7 @@ function ResultsPresenter(iView) {
 					+ participant.results[i].trial3 + ","
 					+ participant.results[i].trial1Clicks + ","
 					+ participant.results[i].trial2Clicks + ","
-					+ participant.results[i].trial3Clicks + 
+					+ participant.results[i].trial3Clicks + ","
 					+ participant.results[i].trial1Errors + ","
 					+ participant.results[i].trial2Errors + ","
 					+ participant.results[i].trial3Errors + "<br />";

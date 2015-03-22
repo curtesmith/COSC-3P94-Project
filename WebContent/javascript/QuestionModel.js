@@ -2,14 +2,6 @@
  * 
  */
 function QuestionModel(iPresenter) {
-	QuestionModel.prototype.isCorrect = isCorrect;
-	QuestionModel.prototype.setSolution = setSolution;
-	QuestionModel.prototype.reset = reset;
-	QuestionModel.prototype.recordResults = recordResults;
-	QuestionModel.prototype.next = next;
-	QuestionModel.prototype.stopTimer = stopTimer;
-	QuestionModel.prototype.isDone = isDone;
-
 	var presenter = iPresenter;
 	var solution = "";
 	var totalQuestions = 0;
@@ -18,38 +10,19 @@ function QuestionModel(iPresenter) {
 	var numberOfErrors = 0;
 	var done = false;
 	var responseTime = 0;
-
 	var database = null;
 	var session = null;
 	var participant = null;
-
-	var permutations = new Array();
 	var pi = 0;
+	var iterations = 1;
+	var trial = 1;
 
-	for (var r = 0; r < 2; r++) {
-		for (var l = 3; l <= 3; l = l + 3) {
-			for (var p = 0; p < l; p++) {
-				permutations[pi] = {
-					random : r == 0,
-					length : l,
-					position : p,
-					trial1 : 0,
-					trial2 : 0,
-					trial3 : 0,
-					trial1Clicks : 0,
-					trial1Errors : 0,
-					trial2Clicks : 0,
-					trial2Errors : 0,
-					trial3Clicks : 0,
-					trial3Errors : 0
-				};
-				pi++;
-			}
-		}
-	}
+	var randomList = new Array();
+	randomList = getList(3, 3, 3, true);
+	var orderedList = new Array();
+	orderedList = getList(3, 3, 3, false);
 
-	permutations = shuffle(permutations);
-	pi = 0;
+	var permutations = orderedList.concat(randomList);
 
 	database = new Database();
 	database.connectWithCallback(presenter.window, function(e) {
@@ -66,14 +39,44 @@ function QuestionModel(iPresenter) {
 		});
 	});
 
+	function getList(start, length, increment, random) {
+		var list = new Array();
+		var index = 0;
+
+		for (var l = start; l <= length; l = l + increment) {
+			for (var p = 0; p < l; p++) {
+				list[index] = {
+					random : random,
+					length : l,
+					position : p,
+					trial1 : 0,
+					trial2 : 0,
+					trial3 : 0,
+					trial1Clicks : 0,
+					trial1Errors : 0,
+					trial2Clicks : 0,
+					trial2Errors : 0,
+					trial3Clicks : 0,
+					trial3Errors : 0
+				};
+				index++;
+			}
+		}
+
+		return shuffle(list);
+	}
+
+	QuestionModel.prototype.isCorrect = isCorrect;
 	function isCorrect(value) {
 		return value == solution;
 	}
 
+	QuestionModel.prototype.setSolution = setSolution;
 	function setSolution(value) {
 		solution = value;
 	}
 
+	QuestionModel.prototype.reset = reset;
 	function reset() {
 		numberOfClicks = 0;
 		numberOfErrors = 0;
@@ -85,18 +88,19 @@ function QuestionModel(iPresenter) {
 		pi++;
 	}
 
+	QuestionModel.prototype.recordResults = recordResults;
 	function recordResults() {
-		if (totalQuestions <= permutations.length) {
+		if (iterations % 3 == 1) {
 			permutations[pi - 1].trial1 = responseTime;
-			permutations[pi - 1].trail1Clicks = numberOfClicks;
+			permutations[pi - 1].trial1Clicks = numberOfClicks;
 			permutations[pi - 1].trial1Errors = numberOfErrors;
-		} else if (totalQuestions <= permutations.length * 2) {
+		} else if (iterations % 3 == 2) {
 			permutations[pi - 1].trial2 = responseTime;
-			permutations[pi - 1].trail2Clicks = numberOfClicks;
+			permutations[pi - 1].trial2Clicks = numberOfClicks;
 			permutations[pi - 1].trial2Errors = numberOfErrors;
 		} else {
 			permutations[pi - 1].trial3 = responseTime;
-			permutations[pi - 1].trail3Clicks = numberOfClicks;
+			permutations[pi - 1].trial3Clicks = numberOfClicks;
 			permutations[pi - 1].trial3Errors = numberOfErrors;
 		}
 
@@ -107,54 +111,65 @@ function QuestionModel(iPresenter) {
 			});
 		});
 	}
-	
+
 	QuestionModel.prototype.incrementTotalQuestions = incrementTotalQuestions;
 	function incrementTotalQuestions() {
 		totalQuestions++;
 	}
-	
+
 	QuestionModel.prototype.incrementNumberOfClicks = incrementNumberOfClicks;
 
 	function incrementNumberOfClicks() {
 		numberOfClicks++;
 	}
-	
+
 	QuestionModel.prototype.incrementNumberOfErrors = incrementNumberOfErrors;
 	function incrementNumberOfErrors() {
 		numberOfErrors++;
 	}
-	
+
 	QuestionModel.prototype.getProgress = getProgress;
 	function getProgress() {
 		return (totalQuestions / (permutations.length * 3)) * 100;
 	}
-	
-	QuestionModel.prototype.getNumberOfErrors = getNumberOfErrors;	
+
+	QuestionModel.prototype.getNumberOfErrors = getNumberOfErrors;
 	function getNumberOfErrors() {
 		return numberOfErrors;
 	}
-	
-	QuestionModel.prototype.getNumberOfClicks = getNumberOfClicks;	
+
+	QuestionModel.prototype.getNumberOfClicks = getNumberOfClicks;
 	function getNumberOfClicks() {
 		return numberOfClicks;
 	}
-	
-	QuestionModel.prototype.getResponseTime = getResponseTime;	
-	function getResponseTime(){
+
+	QuestionModel.prototype.getResponseTime = getResponseTime;
+	function getResponseTime() {
 		return responseTime;
 	}
 
+	QuestionModel.prototype.next = next;
 	function next() {
-		if (pi >= permutations.length) {
-			pi = 0;
+		if (pi >= permutations.length / 2) {
+			if (iterations < 3) {
+				pi = 0;
+				iterations++;
+			} else if (iterations == 3) {
+				iterations++;			
+			} else if (pi >= permutations.length) {
+				pi = permutations.length / 2;
+				iterations++;
+			}
 		}
 		reset();
 	}
 
+	QuestionModel.prototype.isDone = isDone;
 	function isDone() {
 		return done;
 	}
 
+	QuestionModel.prototype.stopTimer = stopTimer;
 	function stopTimer() {
 		done = true;
 		responseTime = new Date().getTime() - start.getTime();
