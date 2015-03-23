@@ -18,9 +18,9 @@ function QuestionModel(iPresenter) {
 	var trial = 1;
 
 	var randomList = new Array();
-	randomList = getList(3, 3, 3, true);
+	randomList = getList(3, 18, 3, true);
 	var orderedList = new Array();
-	orderedList = getList(3, 3, 3, false);
+	orderedList = getList(3, 18, 3, false);
 
 	var permutations = orderedList.concat(randomList);
 
