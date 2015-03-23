@@ -17,7 +17,7 @@ function ResultsPresenter(iView) {
 	function renderResults(participant) {
 		var results = "id,Order,Number Of Items,Position,"
 				+ "Trial #1 Response Time,Trial #2 Response Time,Trial #3 Response Time, "
-				+ "Trial #1 Number of Clicks, Trial #2 Number of Clicks, Trial #3 Number of Clicks "
+				+ "Trial #1 Number of Clicks, Trial #2 Number of Clicks, Trial #3 Number of Clicks, "
 				+ "Trial #1 Number of Errors, Trial #2 Number of Errors, Trial #3 Number of Errors "
 				+ "<br />";
 		var order = "";
