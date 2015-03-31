@@ -17,13 +17,16 @@ function QuestionPresenter(iView) {
 				"study", "television", "umbrella", "victory", "watermelon",
 				"yankee", "zebra" ];
 
+		var order = "alphabeticly";
+		
 		if (random) {
+			order = "randomly";
 			choices = shuffle(choices);
 		}
 
 		model.setSolution(choices[position]);
 		view.clearQuestion();
-		view.appendQuestion(choices[position]);
+		view.appendQuestion(choices[position], order);
 
 		for (var i = 0; i < length; i++) {
 			view.appendChoice(choices[i]);

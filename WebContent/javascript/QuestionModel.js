@@ -17,12 +17,7 @@ function QuestionModel(iPresenter) {
 	var iterations = 1;
 	var trial = 1;
 
-	var randomList = new Array();
-	randomList = getList(3, 18, 3, true);
-	var orderedList = new Array();
-	orderedList = getList(3, 18, 3, false);
-
-	var permutations = orderedList.concat(randomList);
+	var permutations = getList(3, 18, 3);
 
 	database = new Database();
 	database.connectWithCallback(presenter.window, function(e) {
@@ -39,27 +34,30 @@ function QuestionModel(iPresenter) {
 		});
 	});
 
-	function getList(start, length, increment, random) {
+	function getList(start, length, increment) {
 		var list = new Array();
 		var index = 0;
 
-		for (var l = start; l <= length; l = l + increment) {
-			for (var p = 0; p < l; p++) {
-				list[index] = {
-					random : random,
-					length : l,
-					position : p,
-					trial1 : 0,
-					trial2 : 0,
-					trial3 : 0,
-					trial1Clicks : 0,
-					trial1Errors : 0,
-					trial2Clicks : 0,
-					trial2Errors : 0,
-					trial3Clicks : 0,
-					trial3Errors : 0
-				};
-				index++;
+		for (var random = 0; random <= 1; random++) {
+
+			for (var l = start; l <= length; l = l + increment) {
+				for (var p = 0; p < l; p++) {
+					list[index] = {
+						random : random,
+						length : l,
+						position : p,
+						trial1 : 0,
+						trial2 : 0,
+						trial3 : 0,
+						trial1Clicks : 0,
+						trial1Errors : 0,
+						trial2Clicks : 0,
+						trial2Errors : 0,
+						trial3Clicks : 0,
+						trial3Errors : 0
+					};
+					index++;
+				}
 			}
 		}
 
@@ -155,7 +153,7 @@ function QuestionModel(iPresenter) {
 				pi = 0;
 				iterations++;
 			} else if (iterations == 3) {
-				iterations++;			
+				iterations++;
 			} else if (pi >= permutations.length) {
 				pi = permutations.length / 2;
 				iterations++;

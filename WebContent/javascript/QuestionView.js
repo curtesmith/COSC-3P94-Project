@@ -95,10 +95,10 @@ function QuestionView() {
 		}
 	}
 
-	function appendQuestion(word) {
+	function appendQuestion(word, order) {
 		var question = $create("div");
 		question.innerHTML = "Select the option with the word, \"" + word
-				+ "\".";
+				+ "\" from the " + order + " ordered list.";
 		$("question").appendChild(question);
 	}
 
