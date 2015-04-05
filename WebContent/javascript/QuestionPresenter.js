@@ -17,7 +17,7 @@ function QuestionPresenter(iView) {
 				"study", "television", "umbrella", "victory", "watermelon",
 				"yankee", "zebra" ];
 
-		var order = "alphabeticly";
+		var order = "alphabetically";
 		
 		if (random) {
 			order = "randomly";
